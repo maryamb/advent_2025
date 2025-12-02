@@ -1,5 +1,3 @@
-use std::os::linux::raw::stat;
-
 
 fn day_1_1(lines: &Vec<&str>) -> usize {
     lines
