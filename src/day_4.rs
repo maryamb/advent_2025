@@ -166,7 +166,7 @@ mod tests {
     #[test]
     fn test_string_to_table_and_count_adjacents() {
         let input = std::fs::read_to_string("data/day_4.txt")
-    .expect("Failed to read day_4_input.txt");
+            .expect("Failed to read day_4_input.txt");
 
     let table = string_to_table(input);
     let adjacents = count_adjacents(&table);
