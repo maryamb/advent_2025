@@ -1,54 +1,50 @@
-
 fn get_invalids(lower: i64, upper: i64) -> i64 {
     (lower..=upper)
-    .map(|num| {
-        let num_str = num.to_string();
-        let mid = num_str.len() / 2;
-        if num_str.len() % 2 != 0 {
-            return 0;
-        }
-        let (left, right) = num_str.split_at(mid);
-        if left == right {
-            return num;
-        }
-        0
-    })
-    .sum()
+        .map(|num| {
+            let num_str = num.to_string();
+            let mid = num_str.len() / 2;
+            if num_str.len() % 2 != 0 {
+                return 0;
+            }
+            let (left, right) = num_str.split_at(mid);
+            if left == right {
+                return num;
+            }
+            0
+        })
+        .sum()
 }
 
 fn get_invalids_v2(lower: i64, upper: i64) -> i64 {
     (lower..=upper)
-    .filter(|num| {
-        let num_str = num.to_string();
-        (1..=num_str.len() / 2)
-        .any(|current_len| {
-            if num_str.len() % current_len != 0 {
-                return false;
-            }
-            
-            let pattern = &num_str[0..current_len];
-            num_str.as_bytes()
+        .filter(|num| {
+            let num_str = num.to_string();
+            (1..=num_str.len() / 2).any(|current_len| {
+                if num_str.len() % current_len != 0 {
+                    return false;
+                }
+
+                let pattern = &num_str[0..current_len];
+                num_str
+                    .as_bytes()
                     .chunks(current_len)
                     .all(|chunk| std::str::from_utf8(chunk).unwrap() == pattern)
+            })
         })
-    })
-    .sum()
+        .sum()
 }
-
-
 
 fn day_2_1(all_ranges: &str, get_invalids: fn(i64, i64) -> i64) -> i64 {
     all_ranges
-    .split(',')
-    .map(|s| {
-        let (left, right) = s.split_once('-').expect("msg");
-        let left: i64 = left.parse().expect("msg");
-        let right: i64 = right.parse().expect("msg");
-        (left, right)
-    })
-    .fold(0, |acc, (a, b)| acc + get_invalids(a, b))
+        .split(',')
+        .map(|s| {
+            let (left, right) = s.split_once('-').expect("msg");
+            let left: i64 = left.parse().expect("msg");
+            let right: i64 = right.parse().expect("msg");
+            (left, right)
+        })
+        .fold(0, |acc, (a, b)| acc + get_invalids(a, b))
 }
-
 
 #[cfg(test)]
 mod tests {

@@ -1,6 +1,5 @@
 use rayon::prelude::*;
 
-
 fn sort_and_merge_intervals(mut intervals: Vec<(usize, usize)>) -> Vec<(usize, usize)> {
     let mut output_intervals: Vec<(usize, usize)> = vec![];
     intervals.sort();
@@ -26,19 +25,16 @@ fn part_1(input_text: String) -> usize {
     let (intervals, values) = parse_input(input_text);
     let intervals = sort_and_merge_intervals(intervals);
     values
-    .iter()
-    .filter(|value| contains(&intervals, **value))
-    .count()
+        .iter()
+        .filter(|value| contains(&intervals, **value))
+        .count()
 }
 
 fn part_2(input_text: String) -> usize {
     let (intervals, _) = parse_input(input_text);
     let intervals = sort_and_merge_intervals(intervals);
 
-    intervals
-    .iter()
-    .map(|(l, r)| r - l + 1)
-    .sum()
+    intervals.iter().map(|(l, r)| r - l + 1).sum()
 }
 
 fn part_1_par(input_text: String) -> usize {
@@ -56,13 +52,15 @@ fn parse_input(input_text: String) -> (Vec<(usize, usize)>, Vec<usize>) {
         .split_once("\n\n")
         .expect("Expected a blank line");
     let intervals: Vec<(usize, usize)> = intervals
-    .lines()
-    .map(|s| {
-        let (l, r) = s.split_once("-").expect("expected l-r");
-        (l.parse::<usize>().expect("invalid left endpoint"),
-        r.parse::<usize>().expect("invalid right endpoint"))
-    })
-    .collect();
+        .lines()
+        .map(|s| {
+            let (l, r) = s.split_once("-").expect("expected l-r");
+            (
+                l.parse::<usize>().expect("invalid left endpoint"),
+                r.parse::<usize>().expect("invalid right endpoint"),
+            )
+        })
+        .collect();
 
     let values: Vec<usize> = values
         .lines()
@@ -104,24 +102,23 @@ mod tests {
 
     #[test]
     fn test_part_1() {
-        assert_eq!(3,  part_1(TEST_STR.to_string()));
-        let input = std::fs::read_to_string("data/day_5.txt")
-            .expect("Failed to read day_5_input.txt");
+        assert_eq!(3, part_1(TEST_STR.to_string()));
+        let input =
+            std::fs::read_to_string("data/day_5.txt").expect("Failed to read day_5_input.txt");
         let input_1 = input.clone();
         let now = std::time::Instant::now();
-        assert_eq!(513,  part_1(input));
+        assert_eq!(513, part_1(input));
         println!("Time taken for normal part_1: {:?}", now.elapsed());
         let now = std::time::Instant::now();
-        assert_eq!(513,  part_1_par(input_1));
+        assert_eq!(513, part_1_par(input_1));
         println!("Time taken for parallel part_1: {:?}", now.elapsed());
     }
 
     #[test]
     fn test_part_2() {
         assert_eq!(14, part_2(TEST_STR.to_string()));
-        let input = std::fs::read_to_string("data/day_5.txt")
-            .expect("Failed to read day_5_input.txt");
-        assert_eq!(339668510830757,  part_2(input));
+        let input =
+            std::fs::read_to_string("data/day_5.txt").expect("Failed to read day_5_input.txt");
+        assert_eq!(339668510830757, part_2(input));
     }
-
 }
